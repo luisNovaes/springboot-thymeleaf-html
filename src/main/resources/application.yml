@@ -1,0 +1,8 @@
+server:
+  port: 8080
+  
+spring:
+  data:
+    mongodb:
+      uri: mongodb://userAdmin:ma292827@134.122.119.44:27017
+      database: banco
