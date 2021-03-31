@@ -56,18 +56,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers("/login/**").permitAll()
-				
-				.antMatchers("/tables/**").permitAll()
-				
-				.antMatchers("/forgot-pass/**").permitAll()
-				.antMatchers("/signup/**").permitAll()
-				.antMatchers("/api/produto/**").permitAll()
-				.antMatchers("/**/*.js", "/**/*.css","/**/*.jpg", "/**/*.png", 
-						"/**/*.ico", "/**/*.woff", "/**/*.ttf", "/**/*.woff2").permitAll()
-				.anyRequest()
-				.authenticated();
+				.antMatchers("/").permitAll().antMatchers("/login/**").permitAll()
+
+				.antMatchers("/tables/**").permitAll().antMatchers("/charts/**").permitAll().antMatchers("/forms/**")
+				.permitAll()
+
+				.antMatchers("/forgot-pass/**").permitAll().antMatchers("/signup/**").permitAll()
+				.antMatchers("/api/produto/**").permitAll().antMatchers("/**/*.js", "/**/*.css", "/**/*.jpg",
+						"/**/*.png", "/**/*.ico", "/**/*.woff", "/**/*.ttf", "/**/*.woff2")
+				.permitAll().anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
