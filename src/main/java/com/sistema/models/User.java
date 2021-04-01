@@ -18,14 +18,6 @@ public class User {
 
 	@NotBlank
 	@Size(max = 20)
-	private String nome;
-
-	@NotBlank
-	@Size(max = 20)
-	private String sobrenome;
-
-	@NotBlank
-	@Size(max = 20)
 	private String username;
 
 	@NotBlank
@@ -40,16 +32,17 @@ public class User {
 	@DBRef
 	private Set<Role> roles = new HashSet<>();
 
+	private boolean policyTerms;
+
 	public User() {
 	}
 
-	public User(String nome, String username, String sobrenome, String email, String password) {
+	public User(String username, String email, String password, boolean policyTerms) {
 		super();
-		this.nome = nome;
 		this.username = username;
-		this.sobrenome = sobrenome;
 		this.email = email;
 		this.password = password;
+		this.policyTerms = policyTerms;
 	}
 
 	public String getId() {
@@ -58,14 +51,6 @@ public class User {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getUsername() {
@@ -100,12 +85,12 @@ public class User {
 		this.roles = roles;
 	}
 
-	public String getSobrenome() {
-		return sobrenome;
+	public boolean isPolicyTerms() {
+		return policyTerms;
 	}
 
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
+	public void setPolicyTerms(boolean policyTerms) {
+		this.policyTerms = policyTerms;
 	}
 
 }

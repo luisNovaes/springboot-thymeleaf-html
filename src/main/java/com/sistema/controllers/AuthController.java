@@ -14,11 +14,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.models.ERole;
 import com.sistema.models.Role;
@@ -28,15 +30,11 @@ import com.sistema.repository.UserRepository;
 import com.sistema.request.LoginRequest;
 import com.sistema.request.SignupRequest;
 import com.sistema.response.JwtResponse;
-import com.sistema.response.MessageResponse;
 import com.sistema.security.UserDetailsImpl;
 import com.sistema.security.services.jwt.JwtUtils;
 
-
-
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController
-@RequestMapping("/api/auth")
+@Controller
 public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -61,53 +59,33 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles));
+		return ResponseEntity.ok(
+				new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 	}
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		
-		String passaword = signUpRequest.getPassword();
-		String confirmarpassword = signUpRequest.getConfirmarpassword();
-		String username = signUpRequest.getEmail();
-		
-		if (passaword.equals(confirmarpassword)) {
-			
-		}else {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Erro: As senhas não são iguais!"));
-		}
-		
-		
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Erro: o nome de usuário já existe!"));
-		}
+	@GetMapping("/signup")
+	public String signup(Model model) {
+
+		User usuario = new User();
+		model.addAttribute("usuario", usuario);
+		return "register";
+	}
+
+	@PostMapping("/api/auth/signup")
+	public String registerUser(@ModelAttribute("usuario") SignupRequest signUpRequest) {
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Erro: o e-mail já está em uso!"));
+			return "login";
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getNome(),
-									username, 
-							 signUpRequest.getSobrenome(),
-							 signUpRequest.getEmail(),
-			  encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()), signUpRequest.isPolicyTerms());
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -142,6 +120,6 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
-		return ResponseEntity.ok(new MessageResponse("Usuário registrado com sucesso!"));
+		return "register_success";
 	}
 }

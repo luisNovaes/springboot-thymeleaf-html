@@ -9,39 +9,21 @@ import javax.validation.constraints.Size;
 public class SignupRequest {
 
 	@NotBlank
-	@Size(max = 20)
-	private String nome;
-
-	@NotBlank
 	@Size(min = 3, max = 20)
 	private String username;
-
-	@NotBlank
-	@Size(max = 20)
-	private String sobrenome;
 
 	@NotBlank
 	@Size(max = 50)
 	@Email
 	private String email;
 
-	private Set<String> roles;
-
 	@NotBlank
 	@Size(min = 6, max = 40)
 	private String password;
 
-	@NotBlank
-	@Size(min = 6, max = 40)
-	private String confirmarpassword;
+	private Set<String> roles;
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+	private boolean policyTerms;
 
 	public String getUsername() {
 		return username;
@@ -49,14 +31,6 @@ public class SignupRequest {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getSobrenome() {
-		return sobrenome;
-	}
-
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
 	}
 
 	public String getEmail() {
@@ -67,14 +41,6 @@ public class SignupRequest {
 		this.email = email;
 	}
 
-	public Set<String> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<String> roles) {
-		this.roles = roles;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -83,12 +49,20 @@ public class SignupRequest {
 		this.password = password;
 	}
 
-	public String getConfirmarpassword() {
-		return confirmarpassword;
+	public Set<String> getRoles() {
+		return roles;
 	}
 
-	public void setConfirmarpassword(String confirmarpassword) {
-		this.confirmarpassword = confirmarpassword;
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
+	}
+
+	public boolean isPolicyTerms() {
+		return policyTerms;
+	}
+
+	public void setPolicyTerms(boolean policyTerms) {
+		this.policyTerms = policyTerms;
 	}
 
 }
