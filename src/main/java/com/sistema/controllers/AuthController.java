@@ -26,6 +26,7 @@ import com.sistema.repository.RoleRepository;
 import com.sistema.repository.UserRepository;
 import com.sistema.request.LoginRequest;
 import com.sistema.request.SignupRequest;
+import com.sistema.response.JwtResponse;
 import com.sistema.security.UserDetailsImpl;
 import com.sistema.security.services.jwt.JwtUtils;
 
@@ -49,6 +50,11 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public String signin(Model model) {
+		
+		LoginRequest loginRequest = new LoginRequest();
+		
+		System.out.println("/login: " + loginRequest.getUsername());
+		System.out.println("/login: " + loginRequest.getPassword());
 
 		ErrorAuth errorAuth = new ErrorAuth();
 		model.addAttribute("errorAuth", errorAuth);
@@ -64,35 +70,42 @@ public class AuthController {
 
 	@PostMapping("/api/auth/signin")
 	public String authenticateUser(@ModelAttribute("login") LoginRequest loginRequest) {
+		
+		String loginUsername = loginRequest.getUsername();
+		String loginPassword = loginRequest.getPassword();
+
+		String stringUsername = loginUsername;
+		String[] splittedUsername = stringUsername.split(",");
+		String username = splittedUsername[0];
+		
+		String stringPassword = loginPassword;
+		String[] splittedpassword = stringPassword.split(",");
+		String password = splittedpassword[0];
+		
+		System.out.println("/signin: " + username);
+		System.out.println("/signin: " + password);
 
 		ErrorAuth.setErro(true);
 
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(username, password));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
 		ErrorAuth.setErro(false);
 
-		String role = authentication.getAuthorities().toString();
-		
-		System.out.println(role);
-		
-		return "login_success";
+		System.out.println(roles.toString());
 
-//		return ResponseEntity.ok(
-//				new JwtResponse(
-//						jwt, 
-//						userDetails.getId(), 
-//						userDetails.getUsername(),
-//						userDetails.getEmail(), 
-//						roles
-//					));
+		JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+				userDetails.getEmail(), roles);
+
+		return "login_success";
 	}
 
 	@GetMapping("/signup")
@@ -152,4 +165,13 @@ public class AuthController {
 
 		return "register_success";
 	}
+	
+	
+	@GetMapping("/erroLogin")
+	public String errorLogin(Model model) {
+		
+
+		return "login";
+	}
+	
 }

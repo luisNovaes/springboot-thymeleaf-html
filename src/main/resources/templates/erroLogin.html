@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
     
-    <meta http-equiv="refresh" content="URL='/login'"/>
+   <meta http-equiv="refresh" content="3; URL='/'"/>
     
     <!-- Bootstrap CSS-->
 <!--     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> -->
@@ -59,7 +59,7 @@
                 <div class="content">
                 
                 <div th:if="${errorAuth.erro}">
-					<div class="alert alert-danger">Invalid username and password.</div>
+					<div class="alert alert-danger">Sua senha está inválida!</div>
 				</div>
                 
                   <form class="form-validate" action="#" th:action="@{/api/auth/signin}"

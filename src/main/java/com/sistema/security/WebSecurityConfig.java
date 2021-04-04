@@ -54,22 +54,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				
+		
+		http.csrf().disable()
+				.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.antMatchers("/forgot-pass/**").permitAll()
 				.antMatchers("/signup/**").permitAll()
 				
+				.antMatchers("/tables/**").hasRole("ADMIN")	
+				
 				.antMatchers("/api/auth/signin/**").permitAll()
 				.antMatchers("/api/auth/signup/**").permitAll()
-
+				.antMatchers("/erroLogin/**").permitAll()
+		
 				.antMatchers("/**/*.js", "/**/*.css", "/**/*.jpg",
 						"/**/*.png", "/**/*.ico", "/**/*.woff", "/**/*.ttf", "/**/*.woff2").permitAll()
 				
-				.anyRequest().authenticated();
+				.anyRequest().authenticated()
+		
+				.and()
+				.formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll()
+                .and()
+		
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);		
+				
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		
 	}
 }
