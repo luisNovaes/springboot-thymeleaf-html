@@ -3,21 +3,20 @@ package com.sistema.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.sistema.models.ErrorAuth;
+
 @Controller
 public class HomeController {
 
 	@GetMapping("/")
-	public String home() {
+	public String home() {	
+		ErrorAuth.setErro(false);	
 		return "index";
-	}
-
-	@GetMapping("/login")
-	public String login() {
-		return "login";
 	}
 
 	@GetMapping("/forgot-pass")
 	public String forgot() {
+		ErrorAuth.setErro(false);
 		return "forgot-pass";
 	}
 

@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,16 +17,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sistema.models.ERole;
+import com.sistema.models.ErrorAuth;
 import com.sistema.models.Role;
 import com.sistema.models.User;
 import com.sistema.repository.RoleRepository;
 import com.sistema.repository.UserRepository;
 import com.sistema.request.LoginRequest;
 import com.sistema.request.SignupRequest;
-import com.sistema.response.JwtResponse;
 import com.sistema.security.UserDetailsImpl;
 import com.sistema.security.services.jwt.JwtUtils;
 
@@ -51,8 +47,25 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@GetMapping("/login")
+	public String signin(Model model) {
+
+		ErrorAuth errorAuth = new ErrorAuth();
+		model.addAttribute("errorAuth", errorAuth);
+
+		User login = new User();
+		model.addAttribute("login", login);
+
+		User usuario = new User();
+		model.addAttribute("usuario", usuario);
+
+		return "login";
+	}
+
+	@PostMapping("/api/auth/signin")
+	public String authenticateUser(@ModelAttribute("login") LoginRequest loginRequest) {
+
+		ErrorAuth.setErro(true);
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -64,15 +77,32 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(
-				new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+		ErrorAuth.setErro(false);
+
+		String role = authentication.getAuthorities().toString();
+		
+		System.out.println(role);
+		
+		return "login_success";
+
+//		return ResponseEntity.ok(
+//				new JwtResponse(
+//						jwt, 
+//						userDetails.getId(), 
+//						userDetails.getUsername(),
+//						userDetails.getEmail(), 
+//						roles
+//					));
 	}
 
 	@GetMapping("/signup")
 	public String signup(Model model) {
 
+		ErrorAuth.setErro(false);
+
 		User usuario = new User();
 		model.addAttribute("usuario", usuario);
+
 		return "register";
 	}
 
