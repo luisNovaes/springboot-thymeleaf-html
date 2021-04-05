@@ -51,10 +51,10 @@ public class AuthController {
 	@GetMapping("/login")
 	public String signin(Model model) {
 		
-		LoginRequest loginRequest = new LoginRequest();
-		
-		System.out.println("/login: " + loginRequest.getUsername());
-		System.out.println("/login: " + loginRequest.getPassword());
+//		LoginRequest loginRequest = new LoginRequest();
+//		
+//		System.out.println("/login: " + loginRequest.getUsername());
+//		System.out.println("/login: " + loginRequest.getPassword());
 
 		ErrorAuth errorAuth = new ErrorAuth();
 		model.addAttribute("errorAuth", errorAuth);
@@ -82,8 +82,8 @@ public class AuthController {
 		String[] splittedpassword = stringPassword.split(",");
 		String password = splittedpassword[0];
 		
-		System.out.println("/signin: " + username);
-		System.out.println("/signin: " + password);
+//		System.out.println("/signin: " + username);
+//		System.out.println("/signin: " + password);
 
 		ErrorAuth.setErro(true);
 
@@ -100,7 +100,7 @@ public class AuthController {
 
 		ErrorAuth.setErro(false);
 
-		System.out.println(roles.toString());
+//		System.out.println(roles.toString());
 
 		JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
 				userDetails.getEmail(), roles);

@@ -23,11 +23,10 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
 		logger.error("Unauthorized error: {}", authException.getMessage());
 
-		logger.error("Couse: {}", authException.getClass().desiredAssertionStatus());
 
 		response.sendRedirect("/login");
 
-		System.out.println("ERRO DE AUTHENTICATION");
+//		System.out.println("ERRO DE AUTHENTICATION");
 
 	}
 
