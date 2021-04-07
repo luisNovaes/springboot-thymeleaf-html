@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,36 +43,35 @@
 <body>
 
  <div class="page">
-	
-	<div th:insert="fragments/menu-superior :: menu-superior"></div>
 
-		<div class="page-content d-flex align-items-stretch">
+	<div th:insert="fragments/menu-superior :: menu-superior"></div>
+				
+		<div class="page-content d-flex align-items-stretch">	
 		
 		<div th:insert="fragments/menu-lateral :: menu-lateral"></div>
 
 			<!-- corpo da página -->
 			<div class="content-inner">
-
-				<div th:insert="fragments/dashboard :: dashboard"></div>
+		   		
+		   		<div th:insert="fragments/bory-tradutor :: bory-tradutor"></div>
 
 				<div th:insert="footer :: footer"></div>
 			</div>
 		</div>
 	</div>
 
-
 	<!-- JavaScript files-->
 	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/popper.js/umd/popper.min.js"></script>
+	<script src="vendor/popper.js/umd/popper.min.js">
+		
+	</script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="vendor/jquery.cookie/jquery.cookie.js"></script>
-	
+	<script src="vendor/jquery.cookie/jquery.cookie.js">
+		
+	</script>
 <!-- 	<script src="vendor/chart.js/Chart.min.js"></script> -->
-	
 	<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
-	
 <!-- 	<script src="js/charts-home.js"></script> -->
-	
 	<!-- Main File-->
 	<script src="js/front.js"></script>
 

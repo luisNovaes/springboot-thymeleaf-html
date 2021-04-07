@@ -9,8 +9,8 @@ import com.sistema.models.ErrorAuth;
 public class HomeController {
 
 	@GetMapping("/")
-	public String home() {	
-		ErrorAuth.setErro(false);	
+	public String home() {
+		ErrorAuth.setErro(false);
 		return "index";
 	}
 
@@ -35,9 +35,9 @@ public class HomeController {
 		return "charts";
 	}
 
-	@GetMapping("/employee")
-	public String employee() {
-		return "employee";
+	@GetMapping("/tradutor")
+	public String tradutor() {
+		return "tradutor";
 	}
 
 }
